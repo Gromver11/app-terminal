@@ -1,6 +1,6 @@
 import { Operator } from "../interfaces";
 
-export const config: Operator[] = [
+export const operatorListSetup: Operator[] = [
   {
     id: 1,
     name: "mts",

@@ -1,37 +1,50 @@
-import * as React from "react";
-import { GetStaticPaths, GetStaticProps } from "next";
-import { config } from "../../utils/config";
+import { GetStaticProps, GetStaticPaths } from "next";
+
 import Layout from "../../components/Layout";
+import PaymentForm from "../../components/PaymentForm";
 import { Operator } from "../../interfaces";
+import { operatorListSetup } from "../../utils/config";
 
 type Props = {
   item?: Operator;
   errors?: string;
 };
 
-const Payment: React.FC<Props> = ({ item }) => {
-  // console.log(item);
+const StaticPropsDetail = ({ item, errors }: Props) => {
+  if (errors) {
+    return (
+      <Layout title="Error | Next.js + TypeScript Example">
+        <p>
+          <span style={{ color: "red" }}>Error:</span> {errors}
+        </p>
+      </Layout>
+    );
+  }
 
-  return <div>{item}</div>;
+  return (
+    <Layout title={` ${item?.name} | Next.js + TypeScript Example`}>
+      <img src={item?.src} alt={item?.name} />
+      {item && <PaymentForm />}
+    </Layout>
+  );
 };
-export default Payment;
 
- export const getStaticPaths: GetStaticPaths = async () => {
-    // Get the paths we want to pre-render based on users
-    const paths = config.map((item) => ({
-      params: { name: item.name.toString() },
-    }));
+export default StaticPropsDetail;
 
-// //   // We'll pre-render only these paths at build time.
-// //   { fallback: false } means other routes should 404.
- return { paths, fallback: false };
- };
+export const getStaticPaths: GetStaticPaths = async () => {
+  const paths = operatorListSetup.map((operator) => ({
+    params: { name: operator.name },
+  }));
+
+  return { paths, fallback: false };
+};
 
 export const getStaticProps: GetStaticProps = async ({ params }) => {
-  console.log(params)
-  const item = config.find((data) => data.name === name);
-  console.log(item)
-  // By returning { props: item }, the StaticPropsDetail component
-  // will receive `item` as a prop at build time
-  return { props: { item }, };
+  try {
+    const name = params?.name;
+    const item = operatorListSetup.find((data) => data.name === name);
+    return { props: { item } };
+  } catch (err) {
+    return { props: { errors: err.message } };
+  }
 };
