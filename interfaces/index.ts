@@ -1,5 +1,5 @@
 export type Operator = {
-  id: number;
-  name: string;
-  src: string;
+  id: number,
+  name: string,
+  src: string,
 };

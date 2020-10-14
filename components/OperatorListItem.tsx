@@ -1,10 +1,10 @@
-import React from "react";
-import Link from "next/link";
+import React from 'react';
+import Link from 'next/link';
 
-import { Operator } from "../interfaces";
+import { Operator } from '../interfaces';
 
 type OperatorListItemProps = {
-  data: Operator;
+  data: Operator,
 };
 
 const OperatorListItem: React.FC<OperatorListItemProps> = ({ data }) => {

@@ -1,7 +1,7 @@
-import Layout from "../components/Layout";
-import OperatorList from "../components/OperatorList";
-import { operatorListSetup } from "../utils/config";
-import { createGlobalStyle } from "styled-components";
+import Layout from '../components/Layout';
+import OperatorList from '../components/OperatorList';
+import { operatorListSetup } from '../utils/config';
+import { createGlobalStyle } from 'styled-components';
 
 const GlobalStyle = createGlobalStyle`
 * {
@@ -10,7 +10,7 @@ const GlobalStyle = createGlobalStyle`
   padding: 0;
 }
 `;
-const IndexPage = () => (
+const IndexPage: React.FC = () => (
   <>
     <GlobalStyle />
     <Layout title="Home | Next.js + TypeScript Example">

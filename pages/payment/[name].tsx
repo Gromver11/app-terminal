@@ -1,21 +1,21 @@
-import { GetStaticProps, GetStaticPaths } from "next";
+import { GetStaticProps, GetStaticPaths } from 'next';
 
-import Layout from "../../components/Layout";
-import PaymentForm from "../../components/PaymentForm";
-import { Operator } from "../../interfaces";
-import { operatorListSetup } from "../../utils/config";
+import Layout from '../../components/Layout';
+import PaymentForm from '../../components/PaymentForm';
+import { Operator } from '../../interfaces';
+import { operatorListSetup } from '../../utils/config';
 
-type Props = {
-  item?: Operator;
-  errors?: string;
+type PaymentProps = {
+  item: Operator,
+  errors: string,
 };
 
-const StaticPropsDetail = ({ item, errors }: Props) => {
+const Payment: React.FC<PaymentProps> = ({ item, errors }) => {
   if (errors) {
     return (
       <Layout title="Error | Next.js + TypeScript Example">
         <p>
-          <span style={{ color: "red" }}>Error:</span> {errors}
+          <span style={{ color: 'red' }}>Error:</span> {errors}
         </p>
       </Layout>
     );
@@ -23,13 +23,13 @@ const StaticPropsDetail = ({ item, errors }: Props) => {
 
   return (
     <Layout title={` ${item?.name} | Next.js + TypeScript Example`}>
-      <img src={item?.src} alt={item?.name} />
+      <img src={item.src} alt={item.name} />
       {item && <PaymentForm />}
     </Layout>
   );
 };
 
-export default StaticPropsDetail;
+export default Payment;
 
 export const getStaticPaths: GetStaticPaths = async () => {
   const paths = operatorListSetup.map((operator) => ({

@@ -1,19 +1,19 @@
-import { Operator } from "../interfaces";
+import { Operator } from '../interfaces';
 
 export const operatorListSetup: Operator[] = [
   {
     id: 1,
-    name: "mts",
-    src: "/images/mts.png",
+    name: 'mts',
+    src: '/images/mts.png',
   },
   {
     id: 2,
-    name: "beeline",
-    src: "/images/beeline.png",
+    name: 'beeline',
+    src: '/images/beeline.png',
   },
   {
     id: 3,
-    name: "megafon",
-    src: "/images/megafon.png",
+    name: 'megafon',
+    src: '/images/megafon.png',
   },
 ];
