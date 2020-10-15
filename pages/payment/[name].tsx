@@ -4,6 +4,21 @@ import Layout from '../../components/Layout';
 import PaymentForm from '../../components/PaymentForm';
 import { Operator } from '../../interfaces';
 import { operatorListSetup } from '../../utils/config';
+import styled, { createGlobalStyle } from 'styled-components';
+
+const GlobalStyle = createGlobalStyle`
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+body {
+  font: 14px/1.4 "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+`;
+const Img = styled.img`
+  width: 100%;
+`;
 
 type PaymentProps = {
   item: Operator,
@@ -22,10 +37,13 @@ const Payment: React.FC<PaymentProps> = ({ item, errors }) => {
   }
 
   return (
-    <Layout title={` ${item?.name} | Next.js + TypeScript Example`}>
-      <img src={item.src} alt={item.name} />
-      {item && <PaymentForm />}
-    </Layout>
+    <>
+      <GlobalStyle />
+      <Layout title={` ${item?.name} | Next.js + TypeScript Example`}>
+        <Img src={item.src} alt={item.name} />
+        {item && <PaymentForm />}
+      </Layout>
+    </>
   );
 };
 

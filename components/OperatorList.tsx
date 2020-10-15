@@ -9,14 +9,26 @@ type OperatorListProps = {
 
 const OperatorListStyled = styled.ul`
   list-style: none;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 `;
-
+const OperatorListItemStyled = styled.li`
+  background-color: #eeeeee;
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
+  height: 111px;
+  &:last-child {
+    margin-bottom: 0;
+  }
+`;
 const OperatorList: React.FC<OperatorListProps> = ({ items }) => (
   <OperatorListStyled>
     {items.map((item) => (
-      <li key={item.id}>
+      <OperatorListItemStyled key={item.id}>
         <OperatorListItem data={item} />
-      </li>
+      </OperatorListItemStyled>
     ))}
   </OperatorListStyled>
 );
