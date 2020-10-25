@@ -3,3 +3,8 @@ export type Operator = {
   name: string,
   src: string,
 };
+
+export type PhoneNumberState = {
+  newInputValue: string,
+  changedSimbolIdx: number | undefined,
+};

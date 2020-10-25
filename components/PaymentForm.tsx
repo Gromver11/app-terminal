@@ -1,4 +1,14 @@
+import {
+  MouseEvent,
+  useEffect,
+  useRef,
+  useState,
+  BaseSyntheticEvent,
+} from 'react';
 import styled from 'styled-components';
+import { PhoneNumberState } from '../interfaces';
+import replaceMasktoNumber from '../utils/replaceMaskToNumber';
+import { getCaretPosition } from '../utils/getCaretPosition';
 
 const Form = styled.form`
   display: flex;
@@ -33,19 +43,69 @@ const FieldsWrapper = styled.div`
   margin-bottom: 20px;
 `;
 const PaymentForm: React.FC = () => {
+  const [phoneNumber, setPhoneNumber] = useState<PhoneNumberState>({
+    newInputValue: '',
+    changedSimbolIdx: 0,
+  });
+  const handleSubmit = (e: MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+  };
+
+  const InputEl = useRef<HTMLInputElement | null>(null);
+
+  useEffect(() => {
+    if (
+      InputEl.current !== null &&
+      phoneNumber.changedSimbolIdx !== undefined
+    ) {
+      const caretPosititon = getCaretPosition(
+        InputEl.current.value,
+        phoneNumber.changedSimbolIdx
+      );
+      InputEl.current.setSelectionRange(caretPosititon, caretPosititon);
+    }
+  }, [phoneNumber]);
+
+  const handleFocus = (e: BaseSyntheticEvent) => {
+    e.persist();
+    if (e.target.value === '') {
+      setPhoneNumber((prev) => ({
+        ...prev,
+        newInputValue: '+7(___)-___-__-__',
+      }));
+    }
+    setTimeout(() => {
+      const caretPos = e.target.value.indexOf('_');
+      e.target.setSelectionRange(caretPos, caretPos);
+    }, 100);
+  };
   return (
     <Form>
       <FieldsWrapper>
         <FormLabel htmlFor="phoneNumber">
           Введите номер телефона
-          <InputStyled id="phoneNumber" type="text" />
+          <InputStyled
+            ref={InputEl}
+            onFocus={handleFocus}
+            id="phoneNumber"
+            type="text"
+            value={phoneNumber.newInputValue}
+            onChange={(e) => {
+              e.persist();
+              setPhoneNumber((prev) =>
+                replaceMasktoNumber(prev.newInputValue, e.target.value)
+              );
+            }}
+          />
         </FormLabel>
         <FormLabel htmlFor="balance">
           Введите сумму баланса
           <InputStyled id="balance" type="text" />
         </FormLabel>
       </FieldsWrapper>
-      <FormButton type="submit">Пополнить</FormButton>
+      <FormButton type="submit" onClick={handleSubmit}>
+        Пополнить
+      </FormButton>
     </Form>
   );
 };
