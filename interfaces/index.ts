@@ -7,4 +7,5 @@ export type Operator = {
 export type PhoneNumberState = {
   newInputValue: string,
   changedSimbolIdx: number | undefined,
+  operationName: 'add' | 'del',
 };

@@ -1,12 +1,15 @@
 import { PhoneNumberState } from '../interfaces';
+import { transformInputValue } from './transformInputValue';
 
 export const replaceMasktoNumber = (
   prevStateInput: string,
   currentInputValue: string
 ): PhoneNumberState => {
+  let newInputValue = '';
+  let changedSimbolIdx;
   if (currentInputValue.length > prevStateInput.length) {
+    const operationName = 'add';
     const charactersCurrentInputValue = currentInputValue.split('');
-    let changedSimbolIdx;
     const charactersDiff = charactersCurrentInputValue.find(
       (inputValueSimbol, idx) => inputValueSimbol !== prevStateInput[idx]
     );
@@ -14,30 +17,41 @@ export const replaceMasktoNumber = (
       changedSimbolIdx = charactersCurrentInputValue.findIndex(
         (inputValueSimbol, idx) => inputValueSimbol !== prevStateInput[idx]
       );
-      charactersCurrentInputValue.splice(changedSimbolIdx, 2, charactersDiff);
+      newInputValue = transformInputValue(
+        charactersCurrentInputValue,
+        changedSimbolIdx,
+        charactersDiff,
+        operationName
+      );
     }
-    const newInputValue = charactersCurrentInputValue.join('');
     return {
       newInputValue,
       changedSimbolIdx,
+      operationName,
     };
   } else {
+    const operationName = 'del';
     const charactersCurrentInputValue = currentInputValue.split('');
     const prevStateCharacters = prevStateInput.split('');
-    // let changedSimbolIdx;
-    // const charactersDiff = prevStateCharacters.find(
-    //   (inputValueSimbol, idx) => inputValueSimbol !== currentInputValue[idx]
-    // );
-    // if (charactersDiff) {
-    const changedSimbolIdx = prevStateCharacters.findIndex(
+    const charactersDiff = prevStateCharacters.find(
       (inputValueSimbol, idx) => inputValueSimbol !== currentInputValue[idx]
     );
-    charactersCurrentInputValue.splice(changedSimbolIdx, 0, '_');
-    // }
-    const newInputValue = charactersCurrentInputValue.join('');
+    if (charactersDiff) {
+      changedSimbolIdx = prevStateCharacters.findIndex(
+        (inputValueSimbol, idx) => inputValueSimbol !== currentInputValue[idx]
+      );
+
+      newInputValue = transformInputValue(
+        charactersCurrentInputValue,
+        changedSimbolIdx,
+        charactersDiff,
+        operationName
+      );
+    }
     return {
       newInputValue,
       changedSimbolIdx,
+      operationName: 'del',
     };
   }
 };

@@ -46,6 +46,7 @@ const PaymentForm: React.FC = () => {
   const [phoneNumber, setPhoneNumber] = useState<PhoneNumberState>({
     newInputValue: '',
     changedSimbolIdx: 0,
+    operationName: 'add',
   });
   const handleSubmit = (e: MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
@@ -60,7 +61,8 @@ const PaymentForm: React.FC = () => {
     ) {
       const caretPosititon = getCaretPosition(
         InputEl.current.value,
-        phoneNumber.changedSimbolIdx
+        phoneNumber.changedSimbolIdx,
+        phoneNumber.operationName
       );
       InputEl.current.setSelectionRange(caretPosititon, caretPosititon);
     }
@@ -71,7 +73,7 @@ const PaymentForm: React.FC = () => {
     if (e.target.value === '') {
       setPhoneNumber((prev) => ({
         ...prev,
-        newInputValue: '+7(___)-___-__-__',
+        newInputValue: '+7(___) ___-__-__',
       }));
     }
     setTimeout(() => {
