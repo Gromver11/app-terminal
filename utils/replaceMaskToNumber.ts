@@ -7,6 +7,7 @@ export const replaceMasktoNumber = (
 ): PhoneNumberState => {
   let newInputValue = '';
   let changedSimbolIdx;
+  let isValidvalue = false;
   if (currentInputValue.length > prevStateInput.length) {
     const operationName = 'add';
     const charactersCurrentInputValue = currentInputValue.split('');
@@ -14,6 +15,9 @@ export const replaceMasktoNumber = (
       (inputValueSimbol, idx) => inputValueSimbol !== prevStateInput[idx]
     );
     if (charactersDiff) {
+      isValidvalue = /[0-9]/.test(charactersDiff);
+    }
+    if (isValidvalue && charactersDiff) {
       changedSimbolIdx = charactersCurrentInputValue.findIndex(
         (inputValueSimbol, idx) => inputValueSimbol !== prevStateInput[idx]
       );
@@ -23,6 +27,8 @@ export const replaceMasktoNumber = (
         charactersDiff,
         operationName
       );
+    } else {
+      newInputValue = prevStateInput;
     }
     return {
       newInputValue,
@@ -51,7 +57,7 @@ export const replaceMasktoNumber = (
     return {
       newInputValue,
       changedSimbolIdx,
-      operationName: 'del',
+      operationName,
     };
   }
 };

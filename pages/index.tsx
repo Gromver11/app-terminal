@@ -20,7 +20,7 @@ const IndexPageTitle = styled.h1`
 const IndexPage: React.FC = () => (
   <>
     <GlobalStyle />
-    <Layout title="Home | Next.js + TypeScript Example">
+    <Layout title="Home | Terminal">
       <IndexPageTitle>
         Чтобы пополнить баланс, выберите оператора из списка
       </IndexPageTitle>

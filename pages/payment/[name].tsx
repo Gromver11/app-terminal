@@ -30,7 +30,7 @@ const Payment: React.FC<PaymentProps> = ({ item, errors }) => {
     return (
       <Layout title="Error | Next.js + TypeScript Example">
         <p>
-          <span style={{ color: 'red' }}>Error:</span> {errors}
+          <span>Error:</span> {errors}
         </p>
       </Layout>
     );
@@ -39,7 +39,7 @@ const Payment: React.FC<PaymentProps> = ({ item, errors }) => {
   return (
     <>
       <GlobalStyle />
-      <Layout title={` ${item?.name} | Next.js + TypeScript Example`}>
+      <Layout title={` ${item?.name} | PaymentForm`}>
         <Img src={item.src} alt={item.name} />
         {item && <PaymentForm />}
       </Layout>

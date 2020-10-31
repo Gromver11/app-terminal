@@ -21,7 +21,7 @@ export const getCaretPosition = (
       case ')':
         return idx - 3;
       default:
-        return idx - 0;
+        return idx;
     }
   }
 };

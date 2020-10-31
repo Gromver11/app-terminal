@@ -73,13 +73,19 @@ const PaymentForm: React.FC = () => {
     if (e.target.value === '') {
       setPhoneNumber((prev) => ({
         ...prev,
-        newInputValue: '+7(___) ___-__-__',
+        newInputValue: '+7 (___) ___-__-__',
       }));
     }
     setTimeout(() => {
       const caretPos = e.target.value.indexOf('_');
       e.target.setSelectionRange(caretPos, caretPos);
     }, 100);
+  };
+  const handleChange = (e: BaseSyntheticEvent) => {
+    e.persist();
+    setPhoneNumber((prev) =>
+      replaceMasktoNumber(prev.newInputValue, e.target.value)
+    );
   };
   return (
     <Form>
@@ -92,12 +98,7 @@ const PaymentForm: React.FC = () => {
             id="phoneNumber"
             type="text"
             value={phoneNumber.newInputValue}
-            onChange={(e) => {
-              e.persist();
-              setPhoneNumber((prev) =>
-                replaceMasktoNumber(prev.newInputValue, e.target.value)
-              );
-            }}
+            onChange={handleChange}
           />
         </FormLabel>
         <FormLabel htmlFor="balance">
