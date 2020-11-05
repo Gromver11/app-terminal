@@ -6,7 +6,7 @@ export const replaceMasktoNumber = (
   currentInputValue: string
 ): PhoneNumberState => {
   let newInputValue = '';
-  let changedSimbolIdx;
+  let changedSimbolIdx = 0;
   let isValidvalue = false;
   if (currentInputValue.length > prevStateInput.length) {
     const operationName = 'add';
@@ -34,6 +34,8 @@ export const replaceMasktoNumber = (
       newInputValue,
       changedSimbolIdx,
       operationName,
+      start: 0,
+      end: 0,
     };
   } else {
     const operationName = 'del';
@@ -58,8 +60,8 @@ export const replaceMasktoNumber = (
       newInputValue,
       changedSimbolIdx,
       operationName,
+      start: 0,
+      end: 0,
     };
   }
 };
-
-export default replaceMasktoNumber;

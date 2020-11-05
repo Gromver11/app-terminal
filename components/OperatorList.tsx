@@ -1,4 +1,3 @@
-import * as React from 'react';
 import OperatorListItem from './OperatorListItem';
 import { Operator } from '../interfaces';
 import styled from 'styled-components';

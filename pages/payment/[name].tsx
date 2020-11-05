@@ -28,7 +28,7 @@ type PaymentProps = {
 const Payment: React.FC<PaymentProps> = ({ item, errors }) => {
   if (errors) {
     return (
-      <Layout title="Error | Next.js + TypeScript Example">
+      <Layout title="Error | Payment">
         <p>
           <span>Error:</span> {errors}
         </p>
