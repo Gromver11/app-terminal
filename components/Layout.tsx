@@ -1,15 +1,11 @@
 import { ReactNode } from 'react';
 import Head from 'next/head';
-import styled from 'styled-components';
+import { Container } from '../styles';
 
 type LayoutProps = {
   children?: ReactNode,
   title?: string,
 };
-const Container = styled.div`
-  width: 300px;
-  margin: 0 auto;
-`;
 
 const Layout: React.FC<LayoutProps> = ({
   children,
