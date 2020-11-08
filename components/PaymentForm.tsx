@@ -4,10 +4,12 @@ import {
   useRef,
   useState,
   BaseSyntheticEvent,
+  useCallback,
 } from 'react';
 import { PhoneNumberState } from '../interfaces';
-import { replaceMasktoNumber } from '../utils/replaceMaskToNumber';
+import { getNewPhoneNumberState } from '../utils/getNewPhoneNumberState';
 import { getCaretPosition } from '../utils/getCaretPosition';
+import { replaceSelectedFragment } from '../utils/replaceSelectedFragment';
 import {
   Form,
   FieldsWrapper,
@@ -45,6 +47,20 @@ const PaymentForm: React.FC = () => {
     }
   }, [phoneNumber]);
 
+  const handleKeyPress = useCallback((e) => {
+    if (e.keyCode === 8) {
+      setPhoneNumber((prev) => ({
+        ...prev,
+        operationName: 'del',
+      }));
+    } else if (e.keyCode !== 8) {
+      setPhoneNumber((prev) => ({
+        ...prev,
+        operationName: 'add',
+      }));
+    }
+  }, []);
+
   const handleFocus = (e: BaseSyntheticEvent) => {
     e.persist();
     if (e.target.value === '') {
@@ -58,12 +74,32 @@ const PaymentForm: React.FC = () => {
       e.target.setSelectionRange(caretPos, caretPos);
     }, 100);
   };
-  const handleChange = (e: BaseSyntheticEvent) => {
-    const { target } = e;
-    setPhoneNumber((prev) =>
-      replaceMasktoNumber(prev.newInputValue, target.value)
-    );
-  };
+  const handleChange = useCallback(
+    (e: BaseSyntheticEvent) => {
+      const { target } = e;
+      const { start, end } = phoneNumber;
+      if (start === end) {
+        setPhoneNumber((prev) =>
+          getNewPhoneNumberState(
+            prev.newInputValue,
+            target.value,
+            prev.operationName
+          )
+        );
+      } else {
+        setPhoneNumber((prev) =>
+          replaceSelectedFragment(
+            prev.newInputValue,
+            target.value,
+            prev.operationName,
+            prev.start,
+            prev.end
+          )
+        );
+      }
+    },
+    [phoneNumber]
+  );
   const handleSelect = (e: BaseSyntheticEvent) => {
     e.persist();
     if (e.target.selectionStart !== e.target.selectionEnd) {
@@ -80,6 +116,7 @@ const PaymentForm: React.FC = () => {
         <FormLabel htmlFor="phoneNumber">
           Введите номер телефона
           <InputStyled
+            onKeyDown={handleKeyPress}
             onSelect={handleSelect}
             ref={InputEl}
             onFocus={handleFocus}

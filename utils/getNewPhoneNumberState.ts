@@ -1,15 +1,15 @@
 import { PhoneNumberState } from '../interfaces';
 import { transformInputValue } from './transformInputValue';
 
-export const replaceMasktoNumber = (
+export const getNewPhoneNumberState = (
   prevStateInput: string,
-  currentInputValue: string
+  currentInputValue: string,
+  operationName: 'add' | 'del'
 ): PhoneNumberState => {
   let newInputValue = '';
   let changedSimbolIdx = 0;
   let isValidvalue = false;
-  if (currentInputValue.length > prevStateInput.length) {
-    const operationName = 'add';
+  if (operationName === 'add') {
     const charactersCurrentInputValue = currentInputValue.split('');
     const charactersDiff = charactersCurrentInputValue.find(
       (inputValueSimbol, idx) => inputValueSimbol !== prevStateInput[idx]
@@ -38,7 +38,6 @@ export const replaceMasktoNumber = (
       end: 0,
     };
   } else {
-    const operationName = 'del';
     const charactersCurrentInputValue = currentInputValue.split('');
     const prevStateCharacters = prevStateInput.split('');
     const charactersDiff = prevStateCharacters.find(
