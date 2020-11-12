@@ -22,7 +22,7 @@ export const replaceSelectedFragment = (
       const selectedFragment = prevStateInput
         .slice(start, end + 1)
         .includes('+7')
-        ? prevStateInput.slice(2, end)
+        ? prevStateInput.slice(2, end + 1)
         : prevStateInput.slice(start, end + 1);
       const re = /[0-9]/g;
       newInputValue =
@@ -39,27 +39,35 @@ export const replaceSelectedFragment = (
       end: 0,
     };
   } else {
-    const charactersCurrentInputValue = currentInputValue.split('');
-    const charactersDiff = charactersCurrentInputValue.find(
-      (inputValueSimbol, idx) => inputValueSimbol !== prevStateInput[idx]
-    );
+    const charactersDiff = currentInputValue[start];
     if (charactersDiff) {
       isValidvalue = /[0-9]/.test(charactersDiff);
     }
     if (isValidvalue && charactersDiff) {
-      changedSimbolIdx = charactersCurrentInputValue.findIndex(
-        (inputValueSimbol, idx) => inputValueSimbol !== prevStateInput[idx]
+      const selectedFragment = prevStateInput
+        .slice(start, end + 1)
+        .includes('+7')
+        ? prevStateInput.slice(2, end + 1)
+        : prevStateInput.slice(start, end + 1);
+      const checkSelectedFragment = selectedFragment.includes('(')
+        ? prevStateInput.slice(2, start + 1)
+        : prevStateInput.slice(2, start);
+      const selectedFragmentFirstValidSimbol = selectedFragment.search(
+        /[_0-9]/
       );
+      newInputValue =
+        '+7' +
+        checkSelectedFragment +
+        selectedFragment.replace(/[_0-9]/, charactersDiff)[
+          selectedFragmentFirstValidSimbol
+        ] +
+        selectedFragment
+          .slice(selectedFragmentFirstValidSimbol + 1)
+          .replace(/[0-9]/g, '_') +
+        prevStateInput.slice(end + 1);
+    } else {
+      newInputValue = prevStateInput;
     }
-    const selectedFragment = prevStateInput.slice(start, end + 1).includes('+7')
-      ? prevStateInput.slice(2, end)
-      : prevStateInput.slice(start, end + 1);
-    newInputValue =
-      '+7' +
-      prevStateInput.slice(2, start) +
-      charactersDiff +
-      selectedFragment.slice(1) +
-      prevStateInput.slice(end + 1);
   }
   return {
     newInputValue,
