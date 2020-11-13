@@ -4,7 +4,7 @@ import { transformInputValue } from './transformInputValue';
 export const getNewPhoneNumberState = (
   prevStateInput: string,
   currentInputValue: string,
-  operationName: 'add' | 'del'
+  operationName: string
 ): PhoneNumberState => {
   let newInputValue = '';
   let changedSimbolIdx = 0;

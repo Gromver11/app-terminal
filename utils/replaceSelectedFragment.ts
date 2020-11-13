@@ -3,7 +3,7 @@ import { PhoneNumberState } from '../interfaces';
 export const replaceSelectedFragment = (
   prevStateInput: string,
   currentInputValue: string,
-  operationName: 'add' | 'del',
+  operationName: string,
   start: number,
   end: number
 ): PhoneNumberState => {

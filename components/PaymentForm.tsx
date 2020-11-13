@@ -18,6 +18,12 @@ import {
   FormButton,
 } from '../styles';
 
+const allowedKeys: { [index: string]: number[] } = {
+  add: [48, 49, 50, 51, 52, 53, 54, 55, 56, 57],
+  del: [8],
+  neutral: [37, 38, 39, 40],
+};
+
 const PaymentForm: React.FC = () => {
   const [phoneNumber, setPhoneNumber] = useState<PhoneNumberState>({
     newInputValue: '',
@@ -35,7 +41,7 @@ const PaymentForm: React.FC = () => {
     const { changedSimbolIdx, operationName, start, end } = phoneNumber;
     if (start !== end) {
       InputEl.current?.setSelectionRange(start, end);
-    } else {
+    } else if (start === end && operationName !== 'neutral') {
       const caretPosititon = InputEl.current
         ? getCaretPosition(
             InputEl.current.value,
@@ -44,20 +50,17 @@ const PaymentForm: React.FC = () => {
           )
         : 0;
       InputEl.current?.setSelectionRange(caretPosititon, caretPosititon);
-    }
+    } else return;
   }, [phoneNumber]);
 
   const handleKeyPress = useCallback((e) => {
-    if (e.keyCode === 8) {
-      setPhoneNumber((prev) => ({
-        ...prev,
-        operationName: 'del',
-      }));
-    } else if (e.keyCode !== 8) {
-      setPhoneNumber((prev) => ({
-        ...prev,
-        operationName: 'add',
-      }));
+    for (const operation in allowedKeys) {
+      if (allowedKeys[operation].includes(e.keyCode)) {
+        setPhoneNumber((prev) => ({
+          ...prev,
+          operationName: operation,
+        }));
+      }
     }
   }, []);
 
