@@ -18,6 +18,7 @@ import {
   FormLabel,
   FormButton,
 } from '../styles';
+import { getSumValue } from '../utils/getSumValue';
 
 const allowedKeys: { [index: string]: number[] } = {
   add: [48, 49, 50, 51, 52, 53, 54, 55, 56, 57],
@@ -28,8 +29,9 @@ const allowedKeys: { [index: string]: number[] } = {
 const PaymentForm: React.FC = () => {
   const [errors, setErrors] = useState<ValidationState>({
     phoneNumber: '',
-    balance: '',
+    sum: '',
   });
+  const [sum, setSum] = useState('');
   const [phoneNumber, setPhoneNumber] = useState<PhoneNumberState>({
     newInputValue: '',
     changedSimbolIdx: 0,
@@ -37,35 +39,35 @@ const PaymentForm: React.FC = () => {
     start: 0,
     end: 0,
   });
-  const handleBlur = (e: BaseSyntheticEvent) => {
+  const onHandleBlur = useCallback((e: BaseSyntheticEvent) => {
     e.persist();
     setErrors((prev) => ({
       ...prev,
       [e.target.id]: checkValidate(e.target.value, e.target.id),
     }));
-  };
+  }, []);
   const handleSubmit = (e: MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
   };
-  const InputEl = useRef<HTMLInputElement | null>(null);
+  const inputEl = useRef<HTMLInputElement | null>(null);
 
   useEffect(() => {
     const { changedSimbolIdx, operationName, start, end } = phoneNumber;
     if (start !== end) {
-      InputEl.current?.setSelectionRange(start, end);
+      inputEl.current?.setSelectionRange(start, end);
     } else if (start === end && operationName !== 'neutral') {
-      const caretPosititon = InputEl.current
+      const caretPosititon = inputEl.current
         ? getCaretPosition(
-            InputEl.current.value,
+            inputEl.current.value,
             changedSimbolIdx,
             operationName
           )
         : 0;
-      InputEl.current?.setSelectionRange(caretPosititon, caretPosititon);
+      inputEl.current?.setSelectionRange(caretPosititon, caretPosititon);
     } else return;
   }, [phoneNumber]);
 
-  const handleKeyPress = useCallback((e) => {
+  const onHandleKeyPress = useCallback((e) => {
     for (const operation in allowedKeys) {
       if (allowedKeys[operation].includes(e.keyCode)) {
         setPhoneNumber((prev) => ({
@@ -76,7 +78,7 @@ const PaymentForm: React.FC = () => {
     }
   }, []);
 
-  const handleFocus = (e: BaseSyntheticEvent) => {
+  const onHandleFocus = useCallback((e: BaseSyntheticEvent) => {
     e.persist();
     if (e.target.value === '') {
       setPhoneNumber((prev) => ({
@@ -88,8 +90,8 @@ const PaymentForm: React.FC = () => {
       const caretPos = e.target.value.indexOf('_');
       e.target.setSelectionRange(caretPos, caretPos);
     }, 100);
-  };
-  const handleChange = useCallback(
+  }, []);
+  const onHandleChangePhoneNumber = useCallback(
     (e: BaseSyntheticEvent) => {
       const { target } = e;
       const { start, end } = phoneNumber;
@@ -115,7 +117,7 @@ const PaymentForm: React.FC = () => {
     },
     [phoneNumber]
   );
-  const handleSelect = (e: BaseSyntheticEvent) => {
+  const onHandleSelect = useCallback((e: BaseSyntheticEvent) => {
     e.persist();
     if (e.target.selectionStart !== e.target.selectionEnd) {
       setPhoneNumber((prev) => ({
@@ -124,28 +126,39 @@ const PaymentForm: React.FC = () => {
         end: e.target.selectionEnd,
       }));
     }
-  };
+  }, []);
+  const onHandleChangeSum = useCallback((e) => {
+    e.persist();
+    setSum((prev) => getSumValue(prev, e.target.value));
+  }, []);
   return (
     <Form>
       <FieldsWrapper>
         <FormLabel htmlFor="phoneNumber">
           Введите номер телефона
           <InputStyled
-            onBlur={handleBlur}
-            onKeyDown={handleKeyPress}
-            onSelect={handleSelect}
-            ref={InputEl}
-            onFocus={handleFocus}
+            onBlur={onHandleBlur}
+            onKeyDown={onHandleKeyPress}
+            onSelect={onHandleSelect}
+            ref={inputEl}
+            onFocus={onHandleFocus}
             id="phoneNumber"
             type="text"
             value={phoneNumber.newInputValue}
-            onChange={handleChange}
+            onChange={onHandleChangePhoneNumber}
           />
           {errors.phoneNumber !== '' ? <div>{errors.phoneNumber}</div> : null}
         </FormLabel>
-        <FormLabel htmlFor="balance">
-          Введите сумму баланса
-          <InputStyled id="balance" type="text" />
+        <FormLabel htmlFor="sum">
+          Введите сумму платежа
+          <InputStyled
+            id="sum"
+            type="text"
+            value={sum}
+            onChange={onHandleChangeSum}
+            onBlur={onHandleBlur}
+          />
+          {errors.sum !== '' ? <div>{errors.sum}</div> : null}
         </FormLabel>
       </FieldsWrapper>
       <FormButton type="submit" onClick={handleSubmit}>

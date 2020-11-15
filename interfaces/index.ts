@@ -14,7 +14,7 @@ export type PhoneNumberState = {
 
 export type ValidationState = {
   phoneNumber: string,
-  balance: string,
+  sum: string,
 };
 
-export type ValidatorCallback = (value: string) => string;
+export type ValidatorFunction = (value: string) => string;

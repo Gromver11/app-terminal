@@ -1,14 +1,14 @@
-import { ValidatorCallback } from '../interfaces';
+import { ValidatorFunction } from '../interfaces';
 
 const dictionaryOfValidators: {
-  [index: string]: ValidatorCallback,
+  [index: string]: ValidatorFunction,
 } = {
   phoneNumber: (value: string) => {
     return value.split('').filter((el: string) => el === '_').length > 0
       ? 'Некорректный номер телефона'
       : '';
   },
-  balance: (value: string) => {
+  sum: (value: string) => {
     return +value < 1
       ? 'минимальная сумма - 1 рубль'
       : +value > 1000
