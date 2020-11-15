@@ -6,11 +6,13 @@ import {
   BaseSyntheticEvent,
   useCallback,
 } from 'react';
+import { useRouter } from 'next/router';
 import { PhoneNumberState, ValidationState } from '../interfaces';
 import { getNewPhoneNumberState } from '../utils/getNewPhoneNumberState';
 import { getCaretPosition } from '../utils/getCaretPosition';
 import { replaceSelectedFragment } from '../utils/replaceSelectedFragment';
 import { checkValidate } from '../utils/validators';
+import { getSumValue } from '../utils/getSumValue';
 import {
   Form,
   FieldsWrapper,
@@ -18,7 +20,6 @@ import {
   FormLabel,
   FormButton,
 } from '../styles';
-import { getSumValue } from '../utils/getSumValue';
 
 const allowedKeys: { [index: string]: number[] } = {
   add: [48, 49, 50, 51, 52, 53, 54, 55, 56, 57],
@@ -27,6 +28,7 @@ const allowedKeys: { [index: string]: number[] } = {
 };
 
 const PaymentForm: React.FC = () => {
+  const router = useRouter();
   const [errors, setErrors] = useState<ValidationState>({
     phoneNumber: '',
     sum: '',
@@ -46,9 +48,23 @@ const PaymentForm: React.FC = () => {
       [e.target.id]: checkValidate(e.target.value, e.target.id),
     }));
   }, []);
-  const handleSubmit = (e: MouseEvent<HTMLButtonElement>) => {
-    e.preventDefault();
-  };
+
+  const onHandleSubmit = useCallback(
+    (e: MouseEvent<HTMLButtonElement>) => {
+      e.preventDefault();
+      fetch('/api/payment')
+        .then((response) =>
+          response.ok ? response.json() : Promise.reject(response)
+        )
+        .then(() => {
+          setTimeout(() => {
+            router.push('/');
+          }, 0);
+        });
+    },
+    [router]
+  );
+
   const inputEl = useRef<HTMLInputElement | null>(null);
 
   useEffect(() => {
@@ -161,7 +177,7 @@ const PaymentForm: React.FC = () => {
           {errors.sum !== '' ? <div>{errors.sum}</div> : null}
         </FormLabel>
       </FieldsWrapper>
-      <FormButton type="submit" onClick={handleSubmit}>
+      <FormButton type="submit" onClick={onHandleSubmit}>
         Пополнить
       </FormButton>
     </Form>
