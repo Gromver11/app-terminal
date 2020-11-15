@@ -6,10 +6,11 @@ import {
   BaseSyntheticEvent,
   useCallback,
 } from 'react';
-import { PhoneNumberState } from '../interfaces';
+import { PhoneNumberState, ValidationState } from '../interfaces';
 import { getNewPhoneNumberState } from '../utils/getNewPhoneNumberState';
 import { getCaretPosition } from '../utils/getCaretPosition';
 import { replaceSelectedFragment } from '../utils/replaceSelectedFragment';
+import { checkValidate } from '../utils/validators';
 import {
   Form,
   FieldsWrapper,
@@ -25,6 +26,10 @@ const allowedKeys: { [index: string]: number[] } = {
 };
 
 const PaymentForm: React.FC = () => {
+  const [errors, setErrors] = useState<ValidationState>({
+    phoneNumber: '',
+    balance: '',
+  });
   const [phoneNumber, setPhoneNumber] = useState<PhoneNumberState>({
     newInputValue: '',
     changedSimbolIdx: 0,
@@ -32,6 +37,13 @@ const PaymentForm: React.FC = () => {
     start: 0,
     end: 0,
   });
+  const handleBlur = (e: BaseSyntheticEvent) => {
+    e.persist();
+    setErrors((prev) => ({
+      ...prev,
+      [e.target.id]: checkValidate(e.target.value, e.target.id),
+    }));
+  };
   const handleSubmit = (e: MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
   };
@@ -119,6 +131,7 @@ const PaymentForm: React.FC = () => {
         <FormLabel htmlFor="phoneNumber">
           Введите номер телефона
           <InputStyled
+            onBlur={handleBlur}
             onKeyDown={handleKeyPress}
             onSelect={handleSelect}
             ref={InputEl}
@@ -128,6 +141,7 @@ const PaymentForm: React.FC = () => {
             value={phoneNumber.newInputValue}
             onChange={handleChange}
           />
+          {errors.phoneNumber !== '' ? <div>{errors.phoneNumber}</div> : null}
         </FormLabel>
         <FormLabel htmlFor="balance">
           Введите сумму баланса

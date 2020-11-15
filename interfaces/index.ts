@@ -11,3 +11,10 @@ export type PhoneNumberState = {
   start: number,
   end: number,
 };
+
+export type ValidationState = {
+  phoneNumber: string,
+  balance: string,
+};
+
+export type ValidatorCallback = (value: string) => string;
