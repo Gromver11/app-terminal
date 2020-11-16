@@ -24,11 +24,10 @@ export const replaceSelectedFragment = (
         .includes('+7')
         ? prevStateInput.slice(2, end + 1)
         : prevStateInput.slice(start, end + 1);
-      const re = /[0-9]/g;
       newInputValue =
         '+7' +
         prevStateInput.slice(2, start) +
-        selectedFragment.replace(re, '_') +
+        selectedFragment.replace(/[0-9]/g, '_') +
         prevStateInput.slice(end + 1);
     }
     return {
@@ -40,6 +39,7 @@ export const replaceSelectedFragment = (
     };
   } else {
     const charactersDiff = currentInputValue[start];
+    changedSimbolIdx = start;
     if (charactersDiff) {
       isValidvalue = /[0-9]/.test(charactersDiff);
     }
@@ -48,16 +48,23 @@ export const replaceSelectedFragment = (
         .slice(start, end + 1)
         .includes('+7')
         ? prevStateInput.slice(2, end + 1)
+        : prevStateInput.slice(start, end + 1).includes('(')
+        ? prevStateInput.slice(3, end + 1)
         : prevStateInput.slice(start, end + 1);
-      const checkSelectedFragment = selectedFragment.includes('(')
-        ? prevStateInput.slice(2, start + 1)
-        : prevStateInput.slice(2, start);
+
       const selectedFragmentFirstValidSimbol = selectedFragment.search(
         /[_0-9]/
       );
+      changedSimbolIdx = start > 3 ? start : 4;
+      const startInputValue =
+        selectedFragment === prevStateInput.slice(start, end + 1)
+          ? prevStateInput.slice(4, start)
+          : '';
       newInputValue =
         '+7' +
-        checkSelectedFragment +
+        ' ' +
+        '(' +
+        startInputValue +
         selectedFragment.replace(/[_0-9]/, charactersDiff)[
           selectedFragmentFirstValidSimbol
         ] +
