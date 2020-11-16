@@ -7,9 +7,7 @@ const IndexPage: React.FC = () => (
   <>
     <GlobalStyle />
     <Layout title="Home | Terminal">
-      <IndexPageTitle>
-        Чтобы пополнить баланс, выберите оператора из списка
-      </IndexPageTitle>
+      <IndexPageTitle>Терминал для оплаты мобильного телефона</IndexPageTitle>
       <OperatorList items={operatorListSetup} />
     </Layout>
   </>

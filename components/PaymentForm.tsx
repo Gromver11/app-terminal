@@ -23,6 +23,7 @@ import {
   InputStyled,
   FormLabel,
   FormButton,
+  ValidationError,
 } from '../styles';
 
 const allowedKeys: { [index: string]: number[] } = {
@@ -167,6 +168,11 @@ const PaymentForm: React.FC = () => {
     e.persist();
     setSum((prev) => getSumValue(prev, e.target.value));
   }, []);
+  const invalidForm =
+    errors.phoneNumber !== '' ||
+    errors.sum !== '' ||
+    phoneNumber.newInputValue === '' ||
+    sum === '';
 
   if (apiMessage.success !== '') {
     return <div>{apiMessage.success}</div>;
@@ -188,7 +194,9 @@ const PaymentForm: React.FC = () => {
               value={phoneNumber.newInputValue}
               onChange={onHandleChangePhoneNumber}
             />
-            {errors.phoneNumber !== '' ? <div>{errors.phoneNumber}</div> : null}
+            {errors.phoneNumber !== '' ? (
+              <ValidationError>{errors.phoneNumber}</ValidationError>
+            ) : null}
           </FormLabel>
           <FormLabel htmlFor="sum">
             Введите сумму платежа
@@ -199,10 +207,16 @@ const PaymentForm: React.FC = () => {
               onChange={onHandleChangeSum}
               onBlur={onHandleBlur}
             />
-            {errors.sum !== '' ? <div>{errors.sum}</div> : null}
+            {errors.sum !== '' ? (
+              <ValidationError>{errors.sum}</ValidationError>
+            ) : null}
           </FormLabel>
         </FieldsWrapper>
-        <FormButton type="submit" onClick={onHandleSubmit}>
+        <FormButton
+          type="submit"
+          onClick={onHandleSubmit}
+          disabled={invalidForm}
+        >
           Пополнить
         </FormButton>
       </Form>
