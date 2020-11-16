@@ -18,3 +18,8 @@ export type ValidationState = {
 };
 
 export type ValidatorFunction = (value: string) => string;
+
+export type ApiMessageState = {
+  success: string,
+  failture: string,
+};

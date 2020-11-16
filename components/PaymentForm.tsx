@@ -7,7 +7,11 @@ import {
   useCallback,
 } from 'react';
 import { useRouter } from 'next/router';
-import { PhoneNumberState, ValidationState } from '../interfaces';
+import {
+  ApiMessageState,
+  PhoneNumberState,
+  ValidationState,
+} from '../interfaces';
 import { getNewPhoneNumberState } from '../utils/getNewPhoneNumberState';
 import { getCaretPosition } from '../utils/getCaretPosition';
 import { replaceSelectedFragment } from '../utils/replaceSelectedFragment';
@@ -34,6 +38,10 @@ const PaymentForm: React.FC = () => {
     sum: '',
   });
   const [sum, setSum] = useState('');
+  const [apiMessage, setApiMessage] = useState<ApiMessageState>({
+    success: '',
+    failture: '',
+  });
   const [phoneNumber, setPhoneNumber] = useState<PhoneNumberState>({
     newInputValue: '',
     changedSimbolIdx: 0,
@@ -53,14 +61,26 @@ const PaymentForm: React.FC = () => {
     (e: MouseEvent<HTMLButtonElement>) => {
       e.preventDefault();
       fetch('/api/payment')
-        .then((response) =>
-          response.ok ? response.json() : Promise.reject(response)
-        )
-        .then(() => {
+        .then((response) => {
+          return response.ok
+            ? response.json()
+            : Promise.reject(
+                'При отправке данных на сервер произошла ошибка. Повторите попытку еще раз'
+              );
+        })
+        .then((response) => {
+          setApiMessage((prev) => ({
+            ...prev,
+            success: response.message,
+            failture: '',
+          }));
           setTimeout(() => {
             router.push('/');
-          }, 0);
-        });
+          }, 1000);
+        })
+        .catch((err) =>
+          setApiMessage((prev) => ({ ...prev, success: '', failture: err }))
+        );
     },
     [router]
   );
@@ -147,40 +167,47 @@ const PaymentForm: React.FC = () => {
     e.persist();
     setSum((prev) => getSumValue(prev, e.target.value));
   }, []);
+
+  if (apiMessage.success !== '') {
+    return <div>{apiMessage.success}</div>;
+  }
   return (
-    <Form>
-      <FieldsWrapper>
-        <FormLabel htmlFor="phoneNumber">
-          Введите номер телефона
-          <InputStyled
-            onBlur={onHandleBlur}
-            onKeyDown={onHandleKeyPress}
-            onSelect={onHandleSelect}
-            ref={inputEl}
-            onFocus={onHandleFocus}
-            id="phoneNumber"
-            type="text"
-            value={phoneNumber.newInputValue}
-            onChange={onHandleChangePhoneNumber}
-          />
-          {errors.phoneNumber !== '' ? <div>{errors.phoneNumber}</div> : null}
-        </FormLabel>
-        <FormLabel htmlFor="sum">
-          Введите сумму платежа
-          <InputStyled
-            id="sum"
-            type="text"
-            value={sum}
-            onChange={onHandleChangeSum}
-            onBlur={onHandleBlur}
-          />
-          {errors.sum !== '' ? <div>{errors.sum}</div> : null}
-        </FormLabel>
-      </FieldsWrapper>
-      <FormButton type="submit" onClick={onHandleSubmit}>
-        Пополнить
-      </FormButton>
-    </Form>
+    <>
+      <Form>
+        <FieldsWrapper>
+          <FormLabel htmlFor="phoneNumber">
+            Введите номер телефона
+            <InputStyled
+              onBlur={onHandleBlur}
+              onKeyDown={onHandleKeyPress}
+              onSelect={onHandleSelect}
+              ref={inputEl}
+              onFocus={onHandleFocus}
+              id="phoneNumber"
+              type="text"
+              value={phoneNumber.newInputValue}
+              onChange={onHandleChangePhoneNumber}
+            />
+            {errors.phoneNumber !== '' ? <div>{errors.phoneNumber}</div> : null}
+          </FormLabel>
+          <FormLabel htmlFor="sum">
+            Введите сумму платежа
+            <InputStyled
+              id="sum"
+              type="text"
+              value={sum}
+              onChange={onHandleChangeSum}
+              onBlur={onHandleBlur}
+            />
+            {errors.sum !== '' ? <div>{errors.sum}</div> : null}
+          </FormLabel>
+        </FieldsWrapper>
+        <FormButton type="submit" onClick={onHandleSubmit}>
+          Пополнить
+        </FormButton>
+      </Form>
+      {apiMessage.failture !== '' ? <div>{apiMessage.failture}</div> : null}
+    </>
   );
 };
 
