@@ -172,7 +172,8 @@ export const ApiMessageStyled =
   `
   font-weight: bold;
   font-style: italic;
-  font-size: 40px;
+  margin: 0 auto;
+  font-size: ${(props) => (props.success ? '40px' : 'inherit')};
   text-align: center;
   color: ${(props) => (props.success ? 'green' : 'red')}
 `;
