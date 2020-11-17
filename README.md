@@ -18,3 +18,5 @@
 * Next.js
 * React и React Hooks
 * Styled-Components
+
+**Демонстрация приложения: https://app-terminal.herokuapp.com/**
