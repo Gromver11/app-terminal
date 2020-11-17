@@ -1,4 +1,4 @@
-import { PhoneNumberState } from '../interfaces';
+import { PhoneNumberState } from '../types';
 
 export const replaceSelectedFragment = (
   prevStateInput: string,

@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import { Img } from '../styles';
 
-import { Operator } from '../interfaces';
+import { Operator } from '../types';
 
 type OperatorListItemProps = {
   data: Operator,

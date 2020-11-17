@@ -1,4 +1,4 @@
-import { Operator } from '../interfaces';
+import { Operator } from '../types';
 
 export const operatorListSetup: Operator[] = [
   {

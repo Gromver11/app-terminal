@@ -2,7 +2,7 @@ import { GetStaticProps, GetStaticPaths } from 'next';
 
 import Layout from '../../components/Layout';
 import PaymentForm from '../../components/PaymentForm';
-import { Operator } from '../../interfaces';
+import { Operator } from '../../types';
 import { operatorListSetup } from '../../utils/config';
 import { Img, GlobalStyle } from '../../styles';
 

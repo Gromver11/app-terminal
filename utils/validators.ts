@@ -1,4 +1,4 @@
-import { ValidatorFunction } from '../interfaces';
+import { ValidatorFunction } from '../types';
 
 const dictionaryOfValidators: {
   [index: string]: ValidatorFunction,

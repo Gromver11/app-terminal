@@ -1,4 +1,4 @@
-import { PhoneNumberState } from '../interfaces';
+import { PhoneNumberState } from '../types';
 import { transformInputValue } from './transformInputValue';
 
 export const getNewPhoneNumberState = (

@@ -1,5 +1,5 @@
 import OperatorListItem from './OperatorListItem';
-import { Operator } from '../interfaces';
+import { Operator } from '../types';
 import { OperatorListItemStyled, OperatorListStyled } from '../styles';
 
 type OperatorListProps = {

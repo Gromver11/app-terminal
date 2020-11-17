@@ -7,11 +7,7 @@ import {
   useCallback,
 } from 'react';
 import { useRouter } from 'next/router';
-import {
-  ApiMessageState,
-  PhoneNumberState,
-  ValidationState,
-} from '../interfaces';
+import { ApiMessageState, PhoneNumberState, ValidationState } from '../types';
 import { getNewPhoneNumberState } from '../utils/getNewPhoneNumberState';
 import { getCaretPosition } from '../utils/getCaretPosition';
 import { replaceSelectedFragment } from '../utils/replaceSelectedFragment';
