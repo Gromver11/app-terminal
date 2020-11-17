@@ -24,6 +24,7 @@ import {
   FormLabel,
   FormButton,
   ValidationError,
+  LoadingTitle,
 } from '../styles';
 
 const allowedKeys: { [index: string]: number[] } = {
@@ -50,6 +51,9 @@ const PaymentForm: React.FC = () => {
     start: 0,
     end: 0,
   });
+
+  const [loading, setLoading] = useState(false);
+
   const onHandleBlur = useCallback((e: BaseSyntheticEvent) => {
     e.persist();
     setErrors((prev) => ({
@@ -61,27 +65,32 @@ const PaymentForm: React.FC = () => {
   const onHandleSubmit = useCallback(
     (e: MouseEvent<HTMLButtonElement>) => {
       e.preventDefault();
-      fetch('/api/payment')
-        .then((response) => {
-          return response.ok
-            ? response.json()
-            : Promise.reject(
-                'При отправке данных на сервер произошла ошибка. Повторите попытку еще раз'
-              );
-        })
-        .then((response) => {
-          setApiMessage((prev) => ({
-            ...prev,
-            success: response.message,
-            failture: '',
-          }));
-          setTimeout(() => {
-            router.push('/');
-          }, 1000);
-        })
-        .catch((err) =>
-          setApiMessage((prev) => ({ ...prev, success: '', failture: err }))
-        );
+      setLoading(true);
+      setTimeout(() => {
+        fetch('/api/payment')
+          .then((response) => {
+            return response.ok
+              ? response.json()
+              : Promise.reject(
+                  'При отправке данных на сервер произошла ошибка. Повторите попытку еще раз'
+                );
+          })
+          .then((response) => {
+            setApiMessage((prev) => ({
+              ...prev,
+              success: response.message,
+              failture: '',
+            }));
+            setTimeout(() => {
+              router.push('/');
+            }, 1000);
+            setLoading(false);
+          })
+          .catch((err) => {
+            setApiMessage((prev) => ({ ...prev, success: '', failture: err }));
+            setLoading(false);
+          });
+      }, 2000);
     },
     [router]
   );
@@ -217,7 +226,11 @@ const PaymentForm: React.FC = () => {
           onClick={onHandleSubmit}
           disabled={invalidForm}
         >
-          Пополнить
+          {loading ? (
+            <LoadingTitle animation> Ожидание...</LoadingTitle>
+          ) : (
+            <LoadingTitle animation={false}>Пополнить</LoadingTitle>
+          )}
         </FormButton>
       </Form>
       {apiMessage.failture !== '' ? <div>{apiMessage.failture}</div> : null}

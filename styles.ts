@@ -10,6 +10,12 @@ body {
   font: 14px/1.4 "Helvetica Neue", Helvetica, Arial, sans-serif;
   background-color: #eaedf0;
 }
+@keyframes blink {
+  0% {color: 0,0,0, 0,1}
+  50% { color: rgba(0, 0, 0, 0,9)}
+  51% { color: rgba(0, 0, 0, 0,6) }
+  100% { color: transparent }
+}
 `;
 export const IndexPageTitle = styled.h1`
   margin-bottom: 20px;
@@ -88,4 +94,15 @@ export const ValidationError = styled.div`
   font-weight: bold;
   position: absolute;
   width: 300px;
+`;
+
+export const LoadingTitle =
+  styled.span <
+  {
+    animation: boolean,
+  } >
+  `
+  font-weight: bold;
+  animation: ${(props) =>
+    props.animation ? 'blink 1s linear infinite' : 'none'}
 `;
