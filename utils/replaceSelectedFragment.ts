@@ -52,7 +52,7 @@ export const replaceSelectedFragment = (
         ? prevStateInput.slice(3, end + 1)
         : prevStateInput.slice(start, end + 1);
 
-      const selectedFragmentFirstValidSimbol = selectedFragment.search(
+      const selectedFragmentFirstValidSimbolIdx = selectedFragment.search(
         /[_0-9]/
       );
       changedSimbolIdx = start > 3 ? start : 4;
@@ -61,15 +61,13 @@ export const replaceSelectedFragment = (
           ? prevStateInput.slice(4, start)
           : '';
       newInputValue =
-        '+7' +
-        ' ' +
-        '(' +
+        '+7 (' +
         startInputValue +
         selectedFragment.replace(/[_0-9]/, charactersDiff)[
-          selectedFragmentFirstValidSimbol
+          selectedFragmentFirstValidSimbolIdx
         ] +
         selectedFragment
-          .slice(selectedFragmentFirstValidSimbol + 1)
+          .slice(selectedFragmentFirstValidSimbolIdx + 1)
           .replace(/[0-9]/g, '_') +
         prevStateInput.slice(end + 1);
     } else {
