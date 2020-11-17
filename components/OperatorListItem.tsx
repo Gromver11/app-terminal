@@ -11,7 +11,7 @@ const OperatorListItem: React.FC<OperatorListItemProps> = ({ data }) => {
   return (
     <Link href="/payment/[name]" as={`/payment/${data.name}`} passHref>
       <a>
-        <Img src={data.src} alt={data.name} />
+        <Img isFormImg={false} src={data.src} alt={data.name} />
       </a>
     </Link>
   );
