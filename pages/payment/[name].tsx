@@ -26,7 +26,7 @@ const Payment: React.FC<PaymentProps> = ({ item, errors }) => {
     <>
       <GlobalStyle />
       <Layout title={` ${item?.name} | PaymentForm`}>
-        <Img src={item.src} alt={item.name} />
+        <Img isFormImg src={item.src} alt={item.name} />
         {item && <PaymentForm />}
       </Layout>
     </>

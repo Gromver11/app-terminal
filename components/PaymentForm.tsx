@@ -25,6 +25,7 @@ import {
   FormButton,
   ValidationError,
   LoadingTitle,
+  ApiMessageStyled,
 } from '../styles';
 
 const allowedKeys: { [index: string]: number[] } = {
@@ -184,7 +185,7 @@ const PaymentForm: React.FC = () => {
     sum === '';
 
   if (apiMessage.success !== '') {
-    return <div>{apiMessage.success}</div>;
+    return <ApiMessageStyled success>{apiMessage.success}</ApiMessageStyled>;
   }
   return (
     <>
@@ -233,7 +234,11 @@ const PaymentForm: React.FC = () => {
           )}
         </FormButton>
       </Form>
-      {apiMessage.failture !== '' ? <div>{apiMessage.failture}</div> : null}
+      {apiMessage.failture !== '' ? (
+        <ApiMessageStyled success={false}>
+          {apiMessage.failture}
+        </ApiMessageStyled>
+      ) : null}
     </>
   );
 };

@@ -22,13 +22,31 @@ export const IndexPageTitle = styled.h1`
   text-align: center;
 `;
 
-export const Img = styled.img`
+export const Img =
+  styled.img <
+  {
+    isFormImg: boolean,
+  } >
+  `
   width: 100%;
+  margin-bottom: 20px;
+  @media screen and (min-width: 768px) {
+    width: ${(props) => (props.isFormImg ? '40%' : '100%')};
+    margin-left: auto;
+    margin-right: auto;
+  }
 `;
 
 export const Container = styled.div`
   width: 300px;
   margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  height: 100vh;
+  @media screen and (min-width: 768px) {
+    width: 764px;
+  }
 `;
 
 export const OperatorListStyled = styled.ul`
@@ -36,6 +54,9 @@ export const OperatorListStyled = styled.ul`
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  @media screen and (min-width: 768px) {
+    flex-direction: row;
+  }
 `;
 export const OperatorListItemStyled = styled.li`
   background-color: #fff;
@@ -49,11 +70,21 @@ export const OperatorListItemStyled = styled.li`
   &:last-child {
     margin-bottom: 0;
   }
+  @media screen and (min-width: 768px) {
+    width: 30%;
+  }
 `;
 export const Form = styled.form`
   display: flex;
   flex-direction: column;
   background-color: #f5f5dc;
+  margin-bottom: 20px;
+  @media screen and (min-width: 768px) {
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: center;
+    height: 100px;
+  }
 `;
 export const InputStyled = styled.input`
   padding: 10px 0;
@@ -61,13 +92,23 @@ export const InputStyled = styled.input`
   background-color: #eeee;
   border-radius: 5px;
   width: 100%;
+  @media screen and (min-width: 768px) {
+    width: 200px;
+  }
 `;
 export const FormLabel = styled.label`
   text-align: center;
   display: block;
   margin-bottom: 50px;
+  position: relative;
   &:last-child {
     margin-bottom: 0;
+  }
+  @media screen and (min-width: 768px) {
+    display: flex;
+    flex-direction: row;
+    margin-bottom: 0;
+    }
   }
 `;
 export const FormButton = styled.button`
@@ -83,10 +124,22 @@ export const FormButton = styled.button`
     background-color: #cccccc;
     cursor: not-allowed;
   }
+  @media screen and (min-width: 768px) {
+    width: 20%;
+    border-radius: 0;
+    margin-right: 20px;
+    margin-left: 20px;
+  }
 `;
 
 export const FieldsWrapper = styled.div`
   margin-bottom: 50px;
+  @media screen and (min-width: 768px) {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    margin-bottom: 0;
+  }
 `;
 export const ValidationError = styled.div`
   font-style: italic;
@@ -94,6 +147,11 @@ export const ValidationError = styled.div`
   font-weight: bold;
   position: absolute;
   width: 300px;
+  @media screen and (min-width: 768px) {
+    bottom: -35px;
+    left: 118px;
+    width: 200px;
+  }
 `;
 
 export const LoadingTitle =
@@ -105,4 +163,16 @@ export const LoadingTitle =
   font-weight: bold;
   animation: ${(props) =>
     props.animation ? 'blink 1s linear infinite' : 'none'}
+`;
+export const ApiMessageStyled =
+  styled.div <
+  {
+    success: boolean,
+  } >
+  `
+  font-weight: bold;
+  font-style: italic;
+  font-size: 40px;
+  text-align: center;
+  color: ${(props) => (props.success ? 'green' : 'red')}
 `;
