@@ -1,15 +1,16 @@
-import Link from 'next/link'
-import Layout from '../components/Layout'
+import Layout from '../components/Layout';
+import OperatorList from '../components/OperatorList';
+import { operatorListSetup } from '../utils/config';
+import { IndexPageTitle, GlobalStyle } from '../styles';
 
-const IndexPage = () => (
-  <Layout title="Home | Next.js + TypeScript Example">
-    <h1>Hello Next.js 👋</h1>
-    <p>
-      <Link href="/about">
-        <a>About</a>
-      </Link>
-    </p>
-  </Layout>
-)
+const IndexPage: React.FC = () => (
+  <>
+    <GlobalStyle />
+    <Layout title="Home | Terminal">
+      <IndexPageTitle>Терминал для оплаты мобильного телефона</IndexPageTitle>
+      <OperatorList items={operatorListSetup} />
+    </Layout>
+  </>
+);
 
-export default IndexPage
+export default IndexPage;
