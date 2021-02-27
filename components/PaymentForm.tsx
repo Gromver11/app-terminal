@@ -51,7 +51,7 @@ const PaymentForm: React.FC = () => {
 
   const [loading, setLoading] = useState(false);
 
-  const onHandleBlur = useCallback((e: BaseSyntheticEvent) => {
+  const handleBlur = useCallback((e: BaseSyntheticEvent) => {
     e.persist();
     setErrors((prev) => ({
       ...prev,
@@ -59,7 +59,7 @@ const PaymentForm: React.FC = () => {
     }));
   }, []);
 
-  const onHandleSubmit = useCallback(
+  const handleSubmit = useCallback(
     (e: MouseEvent<HTMLButtonElement>) => {
       e.preventDefault();
       setLoading(true);
@@ -110,7 +110,7 @@ const PaymentForm: React.FC = () => {
     } else return;
   }, [phoneNumber]);
 
-  const onHandleKeyPress = useCallback((e) => {
+  const handleKeyPress = useCallback((e) => {
     for (const operation in allowedKeys) {
       if (allowedKeys[operation].includes(e.keyCode)) {
         setPhoneNumber((prev) => ({
@@ -121,7 +121,7 @@ const PaymentForm: React.FC = () => {
     }
   }, []);
 
-  const onHandleFocus = useCallback((e: BaseSyntheticEvent) => {
+  const handleFocus = useCallback((e: BaseSyntheticEvent) => {
     e.persist();
     if (e.target.value === '') {
       setPhoneNumber((prev) => ({
@@ -134,7 +134,7 @@ const PaymentForm: React.FC = () => {
       e.target.setSelectionRange(caretPos, caretPos);
     }, 100);
   }, []);
-  const onHandleChangePhoneNumber = useCallback(
+  const handleChangePhoneNumber = useCallback(
     (e: BaseSyntheticEvent) => {
       const { target } = e;
       const { start, end } = phoneNumber;
@@ -160,7 +160,7 @@ const PaymentForm: React.FC = () => {
     },
     [phoneNumber]
   );
-  const onHandleSelect = useCallback((e: BaseSyntheticEvent) => {
+  const handleSelect = useCallback((e: BaseSyntheticEvent) => {
     e.persist();
     if (e.target.selectionStart !== e.target.selectionEnd) {
       setPhoneNumber((prev) => ({
@@ -170,7 +170,7 @@ const PaymentForm: React.FC = () => {
       }));
     }
   }, []);
-  const onHandleChangeSum = useCallback((e) => {
+  const handleChangeSum = useCallback((e) => {
     e.persist();
     setSum((prev) => getSumValue(prev, e.target.value));
   }, []);
@@ -190,15 +190,15 @@ const PaymentForm: React.FC = () => {
           <FormLabel htmlFor="phoneNumber">
             Введите номер телефона
             <InputStyled
-              onBlur={onHandleBlur}
-              onKeyDown={onHandleKeyPress}
-              onSelect={onHandleSelect}
+              onBlur={handleBlur}
+              onKeyDown={handleKeyPress}
+              onSelect={handleSelect}
               ref={inputEl}
-              onFocus={onHandleFocus}
+              onFocus={handleFocus}
               id="phoneNumber"
               type="text"
               value={phoneNumber.newInputValue}
-              onChange={onHandleChangePhoneNumber}
+              onChange={handleChangePhoneNumber}
             />
             {errors.phoneNumber !== '' ? (
               <ValidationError>{errors.phoneNumber}</ValidationError>
@@ -210,19 +210,15 @@ const PaymentForm: React.FC = () => {
               id="sum"
               type="text"
               value={sum}
-              onChange={onHandleChangeSum}
-              onBlur={onHandleBlur}
+              onChange={handleChangeSum}
+              onBlur={handleBlur}
             />
             {errors.sum !== '' ? (
               <ValidationError>{errors.sum}</ValidationError>
             ) : null}
           </FormLabel>
         </FieldsWrapper>
-        <FormButton
-          type="submit"
-          onClick={onHandleSubmit}
-          disabled={invalidForm}
-        >
+        <FormButton type="submit" onClick={handleSubmit} disabled={invalidForm}>
           {loading ? (
             <LoadingTitle animation> Ожидание...</LoadingTitle>
           ) : (
